@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+
+{% block title %} Dashboard {% endblock %}
+
+{% block body_class %} sidebar-mini {% endblock body_class %}
+
+{% block stylesheets %}
+  <!-- Include your necessary stylesheets here -->
+  <link rel="stylesheet" href="/static/assets/css/adminlte.min.css">
+{% endblock stylesheets %}
+
+{% block content %}
+  
+  <div class="content-wrapper">
+    <div class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1 class="m-0 text-dark">YOLOv8 Dashboard</h1>
+          </div>
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="#">Home</a></li>
+              <li class="breadcrumb-item active">Detection Results</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main content -->
+    <section class="content">
+      <div class="container-fluid">
+        <div class="row">
+          <!-- Left Section - Upload Image or Video -->
+          <section class="col-lg-6 connectedSortable">
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">Upload Image or Video</h3>
+              </div>
+              <div class="card-body">
+                <form class="form-signin" method="post" enctype="multipart/form-data" name="form1">
+                  <input type="file" name="file" class="form-control-file" id="inputfile" accept="image/*,video/*">
+                  <br/>
+                  <button class="btn btn-block btn-primary btn-sm" type="submit">Upload</button>
+                </form>
+              </div>
+            </div>
+
+            <!-- Start Webcam Button -->
+            <div class="card">
+              <div class="card-body">
+                <button id="start-webcam" onclick="startWebcam()" class="btn btn-primary btn-sm">Start Webcam</button>
+                <script>
+                  function startWebcam() {
+                    window.location.href = "/webcam_feed";
+                  }
+                </script>
+              </div>
+            </div>
+
+            <!-- Start RTSP Stream Button -->
+            <div class="card">
+              <div class="card-body">
+                <button id="start-rtsp" onclick="startrtsp()" class="btn btn-primary btn-sm">Start RTSP Stream</button>
+                <script>
+                  function startrtsp() {
+                    window.location.href = "/rtsp_feed";
+                  }
+                </script>
+              </div>
+            </div>
+          </section>
+
+          <!-- Right Section - Display Detection Results -->
+          <section class="col-lg-6 connectedSortable">
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">YOLOv8 Detection Results</h3>
+              </div>
+              <div class="card-body">
+                <!-- Image Detection Result -->
+                {% if image_path %}
+                <img id="my-image" src="{{ url_for('static', filename=image_path) }}" style="max-width:100%; height:auto; display: block;">
+                {% endif %}
+
+                <!-- Video Detection Result -->
+                {% if video_feed %}
+                <video id="my-video" width="100%" controls autoplay>
+                  <source src="{{ url_for('video_feed') }}" type="video/mp4">
+                  Your browser does not support the video tag.
+                </video>
+                {% endif %}
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </section>
+  </div>
+
+{% endblock content %}
+
+{% block javascripts %}
+  <!-- Necessary Scripts for AdminLTE -->
+  <script src="/static/assets/plugins/jquery/jquery.min.js"></script>
+  <script src="/static/assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="/static/assets/js/adminlte.js"></script>
+{% endblock javascripts %}
